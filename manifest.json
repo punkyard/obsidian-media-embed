@@ -1,0 +1,9 @@
+{
+  "id": "video-embed",
+  "name": "Video Embed",
+  "version": "1.0.0",
+  "minAppVersion": "1.12.0",
+  "description": "Automatically converts pasted YouTube links into your preferred embed style on an empty line.",
+  "author": "punkyard",
+  "isDesktopOnly": false
+}
