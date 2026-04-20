@@ -1,29 +1,28 @@
-# Video Embed
-
-A simple Obsidian plugin to embed video in notes.
-
 ![Video Embed](assets/hero.png)
 
-Simple paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format — no commands, no shortcuts, just paste.
+Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format — no commands, no shortcuts, just paste.
 
 ## Features
 
 - intercepts YouTube URLs pasted on empty lines
 - three embed styles to choose from
-- responsive in iframe and div modes
-- works on desktop and mobile
+    - responsive in iframe and div modes
+    - working on desktop and mobile
 
 ## Embed styles
 
+Choose your preferred style in **Settings → Video Embed**.
+
 ![Video Embed Settings](assets/video-embed-settings.png)
 
-Choose your preferred style in **Settings → Video Embed**.
 
 | Style | Output | Responsive |
 |---|---|---|
 | markdown | `![]()` | no — fixed size |
 | iframe | `<iframe ...>` | yes — fills pane width |
 | div | `<div><iframe ...>` | yes — bulletproof |
+
+#### Results in source mode:
 
 ![Video Embed Options](assets/video-embed-options.png)
 
@@ -45,9 +44,9 @@ Supported URL formats:
 
 ---
 
-## Installation
+### Installation
 
-### From Obsidian Community Plugins
+#### From Obsidian Community Plugins
 
 1. open **Settings → Community plugins**
 2. disable Safe mode if prompted
@@ -55,7 +54,7 @@ Supported URL formats:
 4. install and enable
 5. choose your preferred style (markdown, iframe, div)
 
-### Manual
+#### Manual
 
 1. download `video-embed.zip` from the [latest release](../../releases/latest)
 2. unzip it into `<your vault>/.obsidian/plugins/`
@@ -63,16 +62,16 @@ Supported URL formats:
 
 ---
 
-## Roadmap
+### Roadmap
 
 - **v2** _when repo hits 100 GitHub ⭐_ — more video providers (Vimeo, Dailymotion, …)
 - **v3** _when repo hits 1 000 GitHub ⭐_ — import video metadata (title, thumbnail) from URL
 
-## Contributing
+### Contributing
 
 Found a bug or have a suggestion? [Open an issue](../../issues).
 
-## License
+### License
 
 [GPL-3.0](LICENSE)
 
