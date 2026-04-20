@@ -1,6 +1,6 @@
 ![Video Embed](assets/hero.png)
 
-Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format — no commands, no shortcuts, just paste.
+Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format (markdown, iframe or div) — no commands, no shortcuts, just paste.
 
 ## Features
 

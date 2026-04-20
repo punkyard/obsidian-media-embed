@@ -2,10 +2,12 @@ import { Plugin, PluginSettingTab, Setting, App } from 'obsidian';
 
 interface VideoEmbedSettings {
 	embedStyle: 'md' | 'iframe' | 'div';
+	shortsWidth: string;
 }
 
 const DEFAULT_SETTINGS: VideoEmbedSettings = {
 	embedStyle: 'md',
+	shortsWidth: '100%',
 };
 
 export default class VideoEmbed extends Plugin {
@@ -26,6 +28,8 @@ export default class VideoEmbed extends Plugin {
 
 				const pastedText = evt.clipboardData?.getData('text/plain') ?? '';
 				const videoId = this.extractYoutubeId(pastedText);
+				const isShort = pastedText.includes('/shorts/');
+				const shortsWidth = this.settings.shortsWidth || '100%';
 
 				if (videoId) {
 					evt.preventDefault();
@@ -37,10 +41,18 @@ export default class VideoEmbed extends Plugin {
 							embedCode = `![](${pastedText})`;
 							break;
 						case 'iframe':
-							embedCode = `<iframe width="100%" style="aspect-ratio: 16/9;" src="https://www.youtube.com/embed/${videoId}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+							if (isShort) {
+								embedCode = `<iframe style="aspect-ratio: 9/16; width: ${shortsWidth};" src="https://www.youtube.com/embed/${videoId}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+							} else {
+								embedCode = `<iframe width="100%" style="aspect-ratio: 16/9;" src="https://www.youtube.com/embed/${videoId}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+							}
 							break;
 						case 'div':
-							embedCode = `<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/${videoId}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+							if (isShort) {
+								embedCode = `<div style="position: relative; width: ${shortsWidth}; aspect-ratio: 9/16; overflow: hidden;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/${videoId}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+							} else {
+								embedCode = `<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/${videoId}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+							}
 							break;
 					}
 
@@ -79,9 +91,21 @@ class VideoEmbedSettingTab extends PluginSettingTab {
 
 		containerEl.createEl('h2', { text: 'Video Embed Settings' });
 
+		const embedDesc = document.createDocumentFragment();
+		embedDesc.append(
+			'Choose how YouTube links are automatically formatted when pasted on an empty line.',
+			embedDesc.createEl('br'),
+			embedDesc.createEl('br'),
+			embedDesc.createEl('span', { text: '1. markdown: ![]() — cleanest code but fixed size, unresponsive.' }),
+			embedDesc.createEl('br'),
+			embedDesc.createEl('span', { text: '2. iframe: simple HTML — fills pane width, no black bars.' }),
+			embedDesc.createEl('br'),
+			embedDesc.createEl('span', { text: '3. div: bulletproof wrapper — should work in 100% of cases.' }),
+		);
+
 		new Setting(containerEl)
 			.setName('Embed Style')
-			.setDesc('Choose how YouTube links are automatically formatted when pasted on an empty line.')
+			.setDesc(embedDesc)
 			.addDropdown(dropdown => dropdown
 				.addOption('md', '1. standard markdown')
 				.addOption('iframe', '2. iframe (responsive)')
@@ -92,8 +116,15 @@ class VideoEmbedSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-		containerEl.createEl('p', { text: "1. markdown: ![]() — cleanest code but locks the video to a fixed size, unresponsive — may result in empty space or black bars above/below the video." });
-		containerEl.createEl('p', { text: "2. iframe container: simple HTML — the video stretches to fill the width of the Obsidian pane without any black bars." });
-		containerEl.createEl('p', { text: "3. div container: slightly heavier HTML wrapper — the bulletproof standard that should work in 100% of cases." });
+		new Setting(containerEl)
+			.setName('Shorts width')
+			.setDesc('Width of the embed for YouTube Shorts (portrait videos). Use % for relative (e.g. 50%) or px for fixed (e.g. 360px). Default: 100%.')
+			.addText(text => text
+				.setPlaceholder('100%')
+				.setValue(this.plugin.settings.shortsWidth)
+				.onChange(async (value: string) => {
+					this.plugin.settings.shortsWidth = value.trim() || '100%';
+					await this.plugin.saveSettings();
+				}));
 	}
 }
