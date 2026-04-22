@@ -139,27 +139,29 @@ class VideoEmbedSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Video Embed Settings' });
+		new Setting(containerEl)
+			.setName('Video embed settings')
+			.setHeading();
 
 		const embedDesc = document.createDocumentFragment();
 		embedDesc.append(
 			'Choose how YouTube links are automatically formatted when pasted on an empty line.',
 			embedDesc.createEl('br'),
 			embedDesc.createEl('br'),
-			embedDesc.createEl('span', { text: '1. markdown: ![]() — cleanest code but fixed size, unresponsive.' }),
+			embedDesc.createEl('span', { text: '1. Markdown: ![]() — cleanest code, but fixed size and not responsive.' }),
 			embedDesc.createEl('br'),
-			embedDesc.createEl('span', { text: '2. iframe: simple HTML — fills pane width, no black bars.' }),
+			embedDesc.createEl('span', { text: '2. Iframe: simple HTML — fills pane width with no black bars.' }),
 			embedDesc.createEl('br'),
-			embedDesc.createEl('span', { text: '3. div: bulletproof wrapper — should work in 100% of cases.' }),
+			embedDesc.createEl('span', { text: '3. Div: resilient wrapper — should work in 100% of cases.' }),
 		);
 
 		new Setting(containerEl)
 			.setName('Embed style')
 			.setDesc(embedDesc)
 			.addDropdown(dropdown => dropdown
-				.addOption('md', '1. standard markdown')
-				.addOption('iframe', '2. iframe (responsive)')
-				.addOption('div', '3. div (responsive)')
+				.addOption('md', '1. Standard markdown')
+				.addOption('iframe', '2. Iframe (responsive)')
+				.addOption('div', '3. Div (responsive)')
 				.setValue(this.plugin.settings.embedStyle)
 				.onChange(async (value: string) => {
 					this.plugin.settings.embedStyle = value as VideoEmbedSettings['embedStyle'];
@@ -168,7 +170,7 @@ class VideoEmbedSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Shorts width')
-			.setDesc('Width of the embed for YouTube Shorts (portrait videos). Use % for relative (e.g. 50%) or px for fixed (e.g. 360px). Default: 100%.')
+			.setDesc('Width of the embed for YouTube shorts (portrait videos). Use % for relative values (for example, 50%) or px for fixed values (for example, 360px). Default: 100%.')
 			.addText(text => text
 				.setPlaceholder('100%')
 				.setValue(this.plugin.settings.shortsWidth)
