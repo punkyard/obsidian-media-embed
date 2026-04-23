@@ -5,7 +5,7 @@ Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's ins
 ## Features
 
 - intercepts YouTube URLs pasted on empty lines
-- three embed styles to choose from
+- three preview styles to choose from
     - responsive in iframe and div modes
     - working on desktop and mobile
 
