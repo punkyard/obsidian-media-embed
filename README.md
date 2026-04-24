@@ -7,14 +7,14 @@
 ### **Features**
 
 - intercepts YouTube URLs pasted on empty lines
-- three preview styles to choose from
+- three preview options to choose from
     - simple markdown
     - responsive in iframe and div modes
     - working on desktop and mobile
 
 ### **Embed styles**
 
-Choose your preferred embed mode in **Settings → Video Embed**.
+Choose your preferred embed mode in Obsidian **Settings... → Video Embed**.
 
 ![Video Embed options](assets/video-embed-options.png)
 
@@ -57,18 +57,18 @@ Choose your preferred embed mode in **Settings → Video Embed**.
 
 #### From Obsidian Community Plugins
 
-1. open **Settings → Community plugins**
+1. open Obsidian **Settings... → Community plugins**
 2. disable `Safe mode` if prompted
 3. click `Browse` and search for `Video Embed`
 4. install and enable the plugin
-5. open Òptions` and choose your preferred style (markdown, iframe, div)
+5. open `Options` and choose your preferred style (markdown, iframe, div)
 
 #### Manual
 
-1. download `main.js` and `manifest.json` from the [latest release](../../releases/latest)
+1. download `main.js`, `manifest.json`, and `styles.css` from the [latest release](../../releases/latest)
 2. create a folder `<your vault>/.obsidian/plugins/video-embed/`
-3. place both files in that folder
-4. reload Obsidian and enable the plugin in **Settings → Community plugins**
+3. place all three files in that folder
+4. reload Obsidian and enable the plugin in Obsidian **Settings... → Community plugins**
 
 ---
 
