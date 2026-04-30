@@ -1,4 +1,4 @@
-![Video Embed](assets/hero.png)
+![Media Embed](assets/hero.png)
 
 > Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format (markdown, iframe or div) — no commands, no shortcuts, just paste.
 
@@ -14,9 +14,9 @@
 
 ### **Embed styles**
 
-Choose your preferred embed mode in Obsidian **Settings... → Video Embed**.
+Choose your preferred embed mode in Obsidian **Settings... → Media Embed**.
 
-![Video Embed options](assets/video-embed-options.png)
+![Media Embed options](assets/media-embed-options.png)
 
 
 | Style | Output | Responsive |
@@ -27,13 +27,13 @@ Choose your preferred embed mode in Obsidian **Settings... → Video Embed**.
 
 ###### Results in source mode:
 
-![Video Embed source](assets/video-embed-source.png)
+![Media Embed source](assets/media-embed-source.png)
 
 ---
 
 ### **Usage**
 
-![get YouTube URL](assets/video-embed-get-video-url.png)
+![get YouTube URL](assets/media-embed-get-video-url.png)
 
 1. copy YouTube video URL (right-click on it: Copy video URL)
 2. open any note
@@ -48,7 +48,7 @@ Choose your preferred embed mode in Obsidian **Settings... → Video Embed**.
 - `https://www.youtube.com/embed/...`
 
 <br><p align="center">
-  <img src="assets/video-embed-ios-markdown-border.png" alt="iOS markdown rendering" />
+  <img src="assets/media-embed-ios-markdown-border.png" alt="iOS markdown rendering" />
 </p><br>
 
 ---
@@ -59,7 +59,7 @@ Choose your preferred embed mode in Obsidian **Settings... → Video Embed**.
 
 1. open Obsidian **Settings... → Community plugins**
 2. disable `Safe mode` if prompted
-3. click `Browse` and search for `Video Embed`
+3. click `Browse` and search for `Media Embed`
 4. install and enable the plugin
 5. open `Options` and choose your preferred style (markdown, iframe, div)
 

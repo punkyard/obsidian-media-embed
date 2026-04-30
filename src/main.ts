@@ -1,21 +1,21 @@
 import { Plugin, PluginSettingTab, Setting, App } from 'obsidian';
 
-interface VideoEmbedSettings {
+interface MediaEmbedSettings {
 	embedStyle: 'md' | 'iframe' | 'div';
 	shortsWidth: string;
 }
 
-const DEFAULT_SETTINGS: VideoEmbedSettings = {
+const DEFAULT_SETTINGS: MediaEmbedSettings = {
 	embedStyle: 'md',
 	shortsWidth: '100%',
 };
 
-export default class VideoEmbed extends Plugin {
-	settings: VideoEmbedSettings;
+export default class MediaEmbed extends Plugin {
+	settings: MediaEmbedSettings;
 
 	async onload() {
 		await this.loadSettings();
-		this.addSettingTab(new VideoEmbedSettingTab(this.app, this));
+		this.addSettingTab(new MediaEmbedSettingTab(this.app, this));
 
 		this.registerEvent(
 			this.app.workspace.on('editor-paste', (evt: ClipboardEvent) => {
@@ -47,16 +47,16 @@ export default class VideoEmbed extends Plugin {
 							break;
 						case 'iframe':
 							if (isShort) {
-									embedCode = `<iframe style="aspect-ratio: 9/16; width: ${shortsWidth};" src="${embedSrc}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+									embedCode = `<iframe style="aspect-ratio: 9/16; width: ${shortsWidth};" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
 							} else {
-									embedCode = `<iframe width="100%" style="aspect-ratio: 16/9;" src="${embedSrc}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+									embedCode = `<iframe width="100%" style="aspect-ratio: 16/9;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
 							}
 							break;
 						case 'div':
 							if (isShort) {
-									embedCode = `<div style="position: relative; width: ${shortsWidth}; aspect-ratio: 9/16; overflow: hidden;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+									embedCode = `<div style="position: relative; width: ${shortsWidth}; aspect-ratio: 9/16; overflow: hidden;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
 							} else {
-									embedCode = `<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Video Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+									embedCode = `<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
 							}
 							break;
 					}
@@ -152,10 +152,10 @@ export default class VideoEmbed extends Plugin {
 	}
 }
 
-class VideoEmbedSettingTab extends PluginSettingTab {
-	plugin: VideoEmbed;
+class MediaEmbedSettingTab extends PluginSettingTab {
+	plugin: MediaEmbed;
 
-	constructor(app: App, plugin: VideoEmbed) {
+	constructor(app: App, plugin: MediaEmbed) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -185,7 +185,7 @@ class VideoEmbedSettingTab extends PluginSettingTab {
 				.addOption('div', 'Div (responsive)')
 				.setValue(this.plugin.settings.embedStyle)
 				.onChange(async (value: string) => {
-					this.plugin.settings.embedStyle = value as VideoEmbedSettings['embedStyle'];
+					this.plugin.settings.embedStyle = value as MediaEmbedSettings['embedStyle'];
 					await this.plugin.saveSettings();
 				}));
 
