@@ -47,16 +47,16 @@ export default class MediaEmbed extends Plugin {
 							break;
 						case 'iframe':
 							if (isShort) {
-									embedCode = `<iframe style="aspect-ratio: 9/16; width: ${shortsWidth};" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-							} else {
-									embedCode = `<iframe width="100%" style="aspect-ratio: 16/9;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+								embedCode = `<iframe style="aspect-ratio: 9/16; width: ${shortsWidth};" src="${embedSrc}" title="Media Embed" frameborder="0" allow="picture-in-picture" allowfullscreen></iframe>`;
+						} else {
+								embedCode = `<iframe width="100%" style="aspect-ratio: 16/9;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="picture-in-picture" allowfullscreen></iframe>`;
 							}
 							break;
 						case 'div':
 							if (isShort) {
-									embedCode = `<div style="position: relative; width: ${shortsWidth}; aspect-ratio: 9/16; overflow: hidden;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
-							} else {
-									embedCode = `<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+								embedCode = `<div style="position: relative; width: ${shortsWidth}; aspect-ratio: 9/16; overflow: hidden;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="picture-in-picture" allowfullscreen></iframe></div>`;
+						} else {
+								embedCode = `<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="${embedSrc}" title="Media Embed" frameborder="0" allow="picture-in-picture" allowfullscreen></iframe></div>`;
 							}
 							break;
 					}
@@ -73,7 +73,7 @@ export default class MediaEmbed extends Plugin {
 		if (trimmed === '') return false;
 		if (/\s/.test(trimmed)) return false;
 
-		const isYoutubeHost = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(trimmed);
+		const isYoutubeHost = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(trimmed);
 		if (!isYoutubeHost) return false;
 
 		return this.extractYoutubeId(trimmed) !== null;
@@ -138,9 +138,28 @@ export default class MediaEmbed extends Plugin {
 	}
 
 	extractYoutubeId(url: string): string | null {
-		const regex = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-		const match = url.match(regex);
-		return match ? (match[1] ?? null) : null;
+		const trimmed = url.trim();
+		if (!trimmed) return null;
+		try {
+			const parsed = new URL(trimmed.includes('://') ? trimmed : `https://${trimmed}`);
+			const hostname = parsed.hostname.toLowerCase();
+			if (!/(?:^|\.)youtube\.com$|(?:^|\.)youtu\.be$/.test(hostname)) return null;
+			if (/youtu\.be$/.test(hostname)) {
+				return this.normalizeYoutubeId(parsed.pathname.slice(1).split(/[/?#]/)[0] ?? '');
+			}
+			const path = parsed.pathname;
+			if (path.startsWith('/shorts/')) return this.normalizeYoutubeId(path.split('/')[2] ?? '');
+			if (path.startsWith('/embed/')) return this.normalizeYoutubeId(path.split('/')[2] ?? '');
+			if (path === '/watch' || path === '/watch/') return this.normalizeYoutubeId(parsed.searchParams.get('v') ?? '');
+			return null;
+		} catch {
+			return null;
+		}
+	}
+
+	normalizeYoutubeId(value: string): string | null {
+		const id = value.trim();
+		return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
 	}
 
 	async loadSettings() {
