@@ -1,8 +1,6 @@
 ![Media Embed](assets/hero.png)
 
-> Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format (markdown, iframe or div) — no commands, no shortcuts, just paste.
-
-
+> Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format (markdown, iframe or div).
 
 ### **Features**
 
@@ -24,6 +22,8 @@ Choose your preferred embed mode in Obsidian **Settings... → Media Embed**.
 | markdown | `![]()` | no — fixed size |
 | iframe | `<iframe ...>` | yes — fills pane width |
 | div | `<div><iframe ...>` | yes, in a frame — bulletproof |
+
+> Not sure which to pick? See [pros & cons and edge-case guide](https://github.com/punkyard/obsidian-media-embed/blob/main/docs/modes-pros-and-cons.md).
 
 ###### Results in source mode:
 
