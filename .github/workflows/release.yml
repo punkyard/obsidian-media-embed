@@ -27,7 +27,9 @@ jobs:
 
       - uses: actions/attest-build-provenance@v2
         with:
-          subject-path: main.js
+          subject-path: |
+            main.js
+            styles.css
 
       - uses: softprops/action-gh-release@v2
         with:
