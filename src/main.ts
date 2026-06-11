@@ -19,6 +19,7 @@ export default class MediaEmbed extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on('editor-paste', (evt: ClipboardEvent) => {
+				if (evt.defaultPrevented) return;
 				const editor = this.app.workspace.activeEditor?.editor;
 				if (!editor) return;
 
@@ -163,7 +164,7 @@ export default class MediaEmbed extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<MediaEmbedSettings>);
 	}
 
 	async saveSettings() {
@@ -183,16 +184,16 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		const embedDesc = document.createDocumentFragment();
+		const embedDesc = createFragment();
 		embedDesc.append(
 			'Choose how YouTube links are automatically formatted when pasted on an empty line.',
 			embedDesc.createEl('br'),
 			embedDesc.createEl('br'),
-			embedDesc.createEl('span', { text: '1. Markdown: ![]() — cleanest code, but fixed size and not responsive.' }),
+			embedDesc.createSpan({ text: '1. Markdown: ![]() — cleanest code, but fixed size and not responsive.' }),
 			embedDesc.createEl('br'),
-			embedDesc.createEl('span', { text: '2. Iframe: simple HTML — fills pane width with no black bars.' }),
+			embedDesc.createSpan({ text: '2. Iframe: simple HTML — fills pane width with no black bars.' }),
 			embedDesc.createEl('br'),
-			embedDesc.createEl('span', { text: '3. Div: resilient wrapper — works in most cases.' }),
+			embedDesc.createSpan({ text: '3. Div: resilient wrapper — works in most cases.' }),
 		);
 
 		new Setting(containerEl)
