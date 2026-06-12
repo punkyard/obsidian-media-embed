@@ -2,13 +2,25 @@
 
 > Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format (markdown, iframe or div).
 
+
+- 100 stars → more video providers (Vimeo, Dailymotion, local files…)
+- 1000 stars → auto-import video title and thumbnail
+
+### ⭐️ **Roadmap** unlocks with GitHub stars:
+
+- _100 GitHub ⭐_ : more video providers (Vimeo, Dailymotion, …)
+- _1 000 GitHub ⭐_ : import video metadata (title, thumbnail) from URL
+
 ### **Features**
 
 - intercepts YouTube URLs pasted on empty lines
+  - youtu.be
+  - shorts
+  - embed URLs
 - three preview options to choose from
     - simple markdown
     - responsive in iframe and div modes
-    - working on desktop and mobile
+- works on desktop and mobile
 
 ### **Embed styles**
 
@@ -65,28 +77,22 @@ Choose your preferred embed mode in Obsidian **Settings... → Media Embed**.
 
 #### Manual
 
-1. download the source ZIP from the [latest release](../../releases/latest)
-2. unzip the archive into `<your vault>/.obsidian/plugins/`
-3. reload Obsidian and enable the plugin in Obsidian **Settings... → Community plugins**
+1. go to the [latest release](../../releases/latest) and download `main.js` and `manifest.json`
+2. create a folder `<your vault>/.obsidian/plugins/video-embed/`
+3. place both files in that folder
+4. reload Obsidian and enable the plugin in **Settings → Community plugins**
 
 ---
 
-### **Roadmap**
-
-- **v2** _when repo hits 100 GitHub ⭐_ — more video providers (Vimeo, Dailymotion, …)
-- **v3** _when repo hits 1 000 GitHub ⭐_ — import video metadata (title, thumbnail) from URL
-
 ### **Contributing**
 
-Found a bug or have a suggestion? [Open an issue](../../issues).
+Found a bug or have a suggestion? You're welcome to [open an issue](../../issues).
 
 ---
 
 ### **License**
 
-This project is licensed under **[GPL-3.0](LICENSE)-or-later**.
-
-In practical terms, that means distributed modifications and derivative versions must also remain open source under GPL-compatible terms.
+This project is licensed under **[MIT](LICENSE)**.
 
 ---
 
