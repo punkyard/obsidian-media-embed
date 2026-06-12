@@ -82,7 +82,7 @@ Choose your preferred embed mode in Obsidian **Settings... → Media Embed**.
 
 ### **Contributing**
 
-Found a bug or have a suggestion? You're welcome to [open an issue](../../issues).
+Found a bug or have a suggestion? You're welcome to [open an issue](../../issues). See [CONTRIBUTING](docs/CONTRIBUTING.md) for development setup and pull request guidelines.
 
 ---
 
