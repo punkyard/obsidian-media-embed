@@ -2,14 +2,10 @@
 
 > Simply paste a YouTube URL on an **empty line** in an Obsidian note and it's instantly converted into your preferred embed format (markdown, iframe or div).
 
-
-- 100 stars → more video providers (Vimeo, Dailymotion, local files…)
-- 1000 stars → auto-import video title and thumbnail
-
 ### ⭐️ **Roadmap** unlocks with GitHub stars:
 
-- _100 GitHub ⭐_ : more video providers (Vimeo, Dailymotion, …)
-- _1 000 GitHub ⭐_ : import video metadata (title, thumbnail) from URL
+- _100 GitHub ⭐_ : more video providers (Vimeo, Dailymotion, local files…)
+- _1 000 GitHub ⭐_ : auto-import video metadata (title, thumbnail) from URL
 
 ### **Features**
 
