@@ -1,9 +1,11 @@
 {
-	"id": "video-embed",
+	"id": "media-embed",
 	"name": "Media Embed",
 	"version": "1.2.0",
 	"minAppVersion": "1.12.0",
 	"description": "Automatically converts pasted YouTube links into your preferred embed style on an empty line.",
 	"author": "punkyard",
+	"authorUrl": "https://github.com/punkyard",
+	"fundingUrl": "https://ko-fi.com/punkyard",
 	"isDesktopOnly": false
 }
