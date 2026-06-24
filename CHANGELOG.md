@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here.
 
-## [Unreleased]
+## [1.2.1] - 2026-06-24
 
 ### Added
 - Alternative embed server support — toggle in settings to route YouTube embeds through an Invidious instance, bypassing embed restrictions for blocked videos (#46)
