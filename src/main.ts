@@ -1,4 +1,4 @@
-import { Plugin, PluginSettingTab, Setting, App } from 'obsidian';
+import { Plugin, PluginSettingTab, App, type SettingDefinitionItem } from 'obsidian';
 
 interface MediaEmbedSettings {
 	embedStyle: 'md' | 'iframe' | 'div';
@@ -189,10 +189,7 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 		this.plugin = plugin;
 	}
 
-	display() {
-		const { containerEl } = this;
-		containerEl.empty();
-
+	getSettingDefinitions(): SettingDefinitionItem[] {
 		const embedDesc = createFragment();
 		embedDesc.append(
 			'Choose how YouTube links are automatically formatted when pasted on an empty line.',
@@ -205,60 +202,72 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 			embedDesc.createSpan({ text: '3. Div: resilient wrapper.' }),
 		);
 
-		new Setting(containerEl)
-			.setName('Embed style')
-			.setDesc(embedDesc)
-			.addDropdown(dropdown => dropdown
-				.addOption('md', 'Markdown (default)')
-				.addOption('iframe', 'Iframe (responsive)')
-				.addOption('div', 'Div (responsive)')
-				.setValue(this.plugin.settings.embedStyle)
-				.onChange(async (value: string) => {
-					this.plugin.settings.embedStyle = value as MediaEmbedSettings['embedStyle'];
-					await this.plugin.saveSettings();
-					this.display();
-				}));
+		const altServerDesc = createFragment();
+		altServerDesc.append(
+			'Use an Invidious instance (e.g. https://invidious.tiekoetter.com) to bypass YouTube embed restrictions. May load slower.',
+		);
 
-		new Setting(containerEl)
-			.setName('YouTube shorts width')
-			.setDesc('Width of the embed for YouTube shorts (portrait videos). Enter a number for pixels (for example, 360) or a percentage for ratio (for example, 50%).')
-			.addText(text => text
-				.setPlaceholder('50%')
-				.setValue(this.plugin.settings.shortsWidth)
-				.onChange(async (value: string) => {
-					this.plugin.settings.shortsWidth = this.plugin.normalizeShortsWidth(value);
-					await this.plugin.saveSettings();
-				}));
+		return [
+			{
+				name: 'Embed style',
+				desc: embedDesc,
+				control: {
+					type: 'dropdown',
+					key: 'embedStyle',
+					options: {
+						md: 'Markdown (default)',
+						iframe: 'Iframe (responsive)',
+						div: 'Div (responsive)',
+					},
+				},
+			},
+			{
+				name: 'YouTube shorts width',
+				desc: 'Width of the embed for YouTube shorts (portrait videos). Enter a number for pixels (for example, 360) or a percentage for ratio (for example, 50%).',
+				control: {
+					type: 'text',
+					key: 'shortsWidth',
+					placeholder: '50%',
+				},
+			},
+			{
+				name: 'Use alternative embed server',
+				desc: altServerDesc,
+				visible: () => this.plugin.settings.embedStyle !== 'md',
+				control: {
+					type: 'toggle',
+					key: 'useAltEmbedServer',
+				},
+			},
+			{
+				name: 'Alternative embed server URL',
+				desc: 'Base URL of the alternative server. Must serve embeds at /embed/{VIDEO_ID}.',
+				visible: () => this.plugin.settings.embedStyle !== 'md' && this.plugin.settings.useAltEmbedServer,
+				control: {
+					type: 'text',
+					key: 'altEmbedServerUrl',
+					placeholder: 'https://invidious.tiekoetter.com',
+				},
+			},
+		];
+	}
 
-		if (this.plugin.settings.embedStyle !== 'md') {
-			const altServerDesc = createFragment();
-			altServerDesc.append(
-				'Use an Invidious instance (e.g. https://invidious.tiekoetter.com) to bypass YouTube embed restrictions. May load slower.',
-			);
+	getControlValue(key: string): unknown {
+		return this.plugin.settings[key as keyof MediaEmbedSettings];
+	}
 
-			new Setting(containerEl)
-				.setName('Use alternative embed server')
-				.setDesc(altServerDesc)
-				.addToggle(toggle => toggle
-					.setValue(this.plugin.settings.useAltEmbedServer)
-					.onChange(async (value: boolean) => {
-						this.plugin.settings.useAltEmbedServer = value;
-						await this.plugin.saveSettings();
-						this.display();
-					}));
-
-			if (this.plugin.settings.useAltEmbedServer) {
-				new Setting(containerEl)
-					.setName('Alternative embed server URL')
-					.setDesc('Base URL of the alternative server. Must serve embeds at /embed/{VIDEO_ID}.')
-					.addText(text => text
-						.setPlaceholder('https://invidious.tiekoetter.com')
-						.setValue(this.plugin.settings.altEmbedServerUrl)
-						.onChange(async (value: string) => {
-							this.plugin.settings.altEmbedServerUrl = value.replace(/\/+$/, '');
-							await this.plugin.saveSettings();
-						}));
-			}
+	async setControlValue(key: string, value: unknown): Promise<void> {
+		if (key === 'embedStyle') {
+			this.plugin.settings.embedStyle = value as MediaEmbedSettings['embedStyle'];
+		} else if (key === 'shortsWidth') {
+			this.plugin.settings.shortsWidth = this.plugin.normalizeShortsWidth(String(value));
+		} else if (key === 'useAltEmbedServer') {
+			this.plugin.settings.useAltEmbedServer = Boolean(value);
+		} else if (key === 'altEmbedServerUrl') {
+			this.plugin.settings.altEmbedServerUrl = String(value).replace(/\/+$/, '');
 		}
+
+		await this.plugin.saveSettings();
+		this.refreshDomState();
 	}
 }

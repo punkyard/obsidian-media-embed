@@ -1,6 +1,6 @@
 {
-	"name": "media-embed",
-	"version": "1.2.0",
+	"name": "video-embed",
+	"version": "1.2.2",
 	"description": "Automatically converts pasted YouTube links into your preferred embed style on an empty line.",
 	"main": "main.js",
 	"type": "module",
