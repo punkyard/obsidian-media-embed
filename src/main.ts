@@ -7,7 +7,7 @@ interface MediaEmbedSettings {
 
 const DEFAULT_SETTINGS: MediaEmbedSettings = {
 	embedStyle: 'md',
-	shortsWidth: '100%',
+	shortsWidth: '50%',
 };
 
 export default class MediaEmbed extends Plugin {
@@ -200,7 +200,7 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 			.setName('Embed style')
 			.setDesc(embedDesc)
 			.addDropdown(dropdown => dropdown
-				.addOption('md', 'Markdown')
+				.addOption('md', 'Markdown (default)')
 				.addOption('iframe', 'Iframe (responsive)')
 				.addOption('div', 'Div (responsive)')
 				.setValue(this.plugin.settings.embedStyle)
@@ -211,9 +211,9 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('YouTube shorts width')
-			.setDesc('Width of the embed for YouTube shorts (portrait videos). Enter a number for pixels (for example, 360) or a percentage for ratio (for example, 100%).')
+			.setDesc('Width of the embed for YouTube shorts (portrait videos). Enter a number for pixels (for example, 360) or a percentage for ratio (for example, 50%).')
 			.addText(text => text
-				.setPlaceholder('100%')
+				.setPlaceholder('50%')
 				.setValue(this.plugin.settings.shortsWidth)
 				.onChange(async (value: string) => {
 					this.plugin.settings.shortsWidth = this.plugin.normalizeShortsWidth(value);
