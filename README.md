@@ -84,7 +84,7 @@ Enable **Use alternative embed server** in settings to route embeds through an [
 #### Manual
 
 1. go to the [latest release](../../releases/latest) and download `main.js` and `manifest.json`
-2. create a folder `<your vault>/.obsidian/plugins/video-embed/`
+2. create a folder `<your vault>/.obsidian/plugins/media-embed/`
 3. place both files in that folder
 4. reload Obsidian and enable the plugin in **Settings → Community plugins**
 
