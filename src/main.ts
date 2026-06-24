@@ -3,11 +3,15 @@ import { Plugin, PluginSettingTab, Setting, App } from 'obsidian';
 interface MediaEmbedSettings {
 	embedStyle: 'md' | 'iframe' | 'div';
 	shortsWidth: string;
+	useAltEmbedServer: boolean;
+	altEmbedServerUrl: string;
 }
 
 const DEFAULT_SETTINGS: MediaEmbedSettings = {
 	embedStyle: 'md',
 	shortsWidth: '50%',
+	useAltEmbedServer: false,
+	altEmbedServerUrl: 'https://invidious.tiekoetter.com',
 };
 
 export default class MediaEmbed extends Plugin {
@@ -81,10 +85,15 @@ export default class MediaEmbed extends Plugin {
 	}
 
 	buildYoutubeEmbedSrc(videoId: string | null, startTime: number | null): string {
-		const baseUrl = `https://www.youtube.com/embed/${videoId ?? ''}`;
-		if (!videoId || startTime === null || startTime < 0) return baseUrl;
+		const host = this.settings.useAltEmbedServer ? this.settings.altEmbedServerUrl : 'https://www.youtube.com';
+		let url = `${host}/embed/${videoId ?? ''}`;
+		if (!videoId) return url;
 
-		return `${baseUrl}?start=${startTime}`;
+		const params: string[] = [];
+		if (this.settings.useAltEmbedServer) params.push('autoplay=0');
+		if (startTime !== null && startTime >= 0) params.push(`start=${startTime}`);
+
+		return params.length ? `${url}?${params.join('&')}` : url;
 	}
 
 	buildYoutubeWatchUrl(videoId: string | null, startTime: number | null): string {
@@ -189,11 +198,11 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 			'Choose how YouTube links are automatically formatted when pasted on an empty line.',
 			embedDesc.createEl('br'),
 			embedDesc.createEl('br'),
-			embedDesc.createSpan({ text: '1. Markdown: ![]() — cleanest code, but fixed size and not responsive.' }),
+			embedDesc.createSpan({ text: '1. Markdown: ![]() — displays all videos.' }),
 			embedDesc.createEl('br'),
-			embedDesc.createSpan({ text: '2. Iframe: simple HTML — fills pane width with no black bars.' }),
+			embedDesc.createSpan({ text: '2. Iframe: simple HTML — fills pane width.' }),
 			embedDesc.createEl('br'),
-			embedDesc.createSpan({ text: '3. Div: resilient wrapper — works in most cases.' }),
+			embedDesc.createSpan({ text: '3. Div: resilient wrapper.' }),
 		);
 
 		new Setting(containerEl)
@@ -207,6 +216,7 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 				.onChange(async (value: string) => {
 					this.plugin.settings.embedStyle = value as MediaEmbedSettings['embedStyle'];
 					await this.plugin.saveSettings();
+					this.display();
 				}));
 
 		new Setting(containerEl)
@@ -219,5 +229,36 @@ class MediaEmbedSettingTab extends PluginSettingTab {
 					this.plugin.settings.shortsWidth = this.plugin.normalizeShortsWidth(value);
 					await this.plugin.saveSettings();
 				}));
+
+		if (this.plugin.settings.embedStyle !== 'md') {
+			const altServerDesc = createFragment();
+			altServerDesc.append(
+				'Use an Invidious instance (e.g. https://invidious.tiekoetter.com) to bypass YouTube embed restrictions. May load slower.',
+			);
+
+			new Setting(containerEl)
+				.setName('Use alternative embed server')
+				.setDesc(altServerDesc)
+				.addToggle(toggle => toggle
+					.setValue(this.plugin.settings.useAltEmbedServer)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.useAltEmbedServer = value;
+						await this.plugin.saveSettings();
+						this.display();
+					}));
+
+			if (this.plugin.settings.useAltEmbedServer) {
+				new Setting(containerEl)
+					.setName('Alternative embed server URL')
+					.setDesc('Base URL of the alternative server. Must serve embeds at /embed/{VIDEO_ID}.')
+					.addText(text => text
+						.setPlaceholder('https://invidious.tiekoetter.com')
+						.setValue(this.plugin.settings.altEmbedServerUrl)
+						.onChange(async (value: string) => {
+							this.plugin.settings.altEmbedServerUrl = value.replace(/\/+$/, '');
+							await this.plugin.saveSettings();
+						}));
+			}
+		}
 	}
 }

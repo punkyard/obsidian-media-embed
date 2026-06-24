@@ -16,6 +16,10 @@
 - three preview options to choose from
     - simple markdown
     - responsive in iframe and div modes
+- alternative embed server support for restricted videos
+    - toggle in settings to route embeds through an Invidious instance
+    - bypasses YouTube embed blocks (Error 153)
+    - configurable URL — swap instances if one is down
 - works on desktop and mobile
 
 ### **Embed styles**
@@ -32,6 +36,12 @@ Choose your preferred embed mode in Obsidian **Settings... → Media Embed**.
 | div | `<div><iframe ...>` | yes, in a frame — bulletproof |
 
 > Not sure which to pick? See [pros & cons and edge-case guide](https://github.com/punkyard/obsidian-media-embed/blob/main/docs/modes-pros-and-cons.md).
+
+### **Alternative embed server**
+
+Some YouTube videos have embedding disabled by the uploader. When pasted in iframe or div mode, they show a blank player (YouTube Error 153).
+
+Enable **Use alternative embed server** in settings to route embeds through an [Invidious](https://invidious.io) instance instead. 
 
 ###### Results in source mode:
 
